@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Alma Tacos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    /* Global styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #f8f4e8; /* off-white */
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Navigation bar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #ffffff;
+      padding: 0.75rem 1rem; /* pulled in from edges */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+      z-index: 1000;
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo {
+      height: 40px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    .restaurant-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+
+    nav {
+        display: flex;
+        align-items: center;
+        }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0;
+      height: 2px;
+      background: #de7560;
+      transition: width 0.25s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /*Order Button*/
+    .order-button {
+    margin-left: 1.5rem;
+    padding: 0.55rem 1.2rem;
+    background-color: #de7560;
+    color: white;
+    border-radius: 999px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    display: inline-block;
+    transition: opacity 0.25s ease;
+    }
+
+    .order-button:hover {
+    opacity: 0.9;
+    }
+
+
+    /* Hero header with parallax-style video */
+    .hero {
+        position: relative;
+        height: 70vh;
+        min-height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden; 
+        color: #fff;
+        margin-top: 80px;
+        }
+
+    .hero-video {
+      position: fixed;  /*parralax */
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      min-width: 100%;
+      min-height: 100%;
+      z-index: -2;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35); /* dark overlay for contrast */
+      z-index: -1;
+    }
+
+    .hero-overlay {
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .hero-logo {
+      max-width: 260px;
+      width: 60%;
+      height: auto;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+    }
+
+    /* Layout spacing for main content */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem 0 1.5rem;
+    }
+
+    section {
+      padding: 3rem 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+      padding-bottom: 4rem;
+    }
+
+    h1, h2 {
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    p {
+      max-width: 700px;
+    }
+
+    /* Popular items */
+    .popular-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .popular-item {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+
+    /* animation starting state */
+    opacity: 0;
+    transform: translateY(60px);
+    transition:
+        opacity 0.6s ease-out,
+        transform 0.6s ease-out;
+    }
+
+    /* when in view make it pop up */
+    .popular-item.in-view {
+    opacity: 1;
+    transform: translateY(0);
+    }
+
+    /* manually do each delay*/
+    .popular-item:nth-child(1) {
+    transition-delay: 0.0s;
+    }
+    .popular-item:nth-child(2) {
+    transition-delay: 0.15s;
+    }
+    .popular-item:nth-child(3) {
+    transition-delay: 0.30s;
+    }
+    
+
+
+    .popular-item h3 {
+      margin-bottom: 0.25rem;
+    }
+
+    .popular-item p {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .item-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+      background-color: #f8f4e8; 
+    }
+
+    /* Button */
+    .menu-button {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #de7560;
+      color: white;
+      border-radius: 999px;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+    }
+
+    .menu-button:hover {
+      opacity: 0.9;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.85rem;
+      color: #777;
+    }
+
+    @media (max-width: 600px) {
+      .navbar {
+        padding: 0.6rem 1rem;
+      }
+      .restaurant-name {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-inner">
+      <div class="nav-left">
+        <!-- Logo links to home section -->
+        <a href="index.html#home">
+          <img src="logo.jpg" alt="Alma Tacos Logo" class="logo">
+        </a>
+        <span class="restaurant-name"></span>
+      </div>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html#home">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+          
+        </ul>
+        <a class="order-button" href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr">ORDER NOW</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero header with parallax video -->
+  <section class="hero">
+    <!-- This will be a video of making food -->
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="\.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    <div class="hero-overlay">
+      <img src="logo.jpg" alt="Alma Tacos Logo" class="hero-logo">
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Home -->
+    <section id="home">
+      <h1>Alma Tacos</h1>
+      <p>All made from scratch, all made from here!</p>
+    </section>
+
+    <!-- Popular Items -->
+    <section id="popular">
+      <h2>Popular Items</h2>
+      <p>A few of our crowd favorites:</p>
+
+      <div class="popular-grid">
+        <div class="popular-item">
+          <img src="chilie_braised_beef.png" alt="Chile Braised Beef" class="item-image">
+          <h3>Chile Braised Beef</h3>
+          <p>Yum</p>
+        </div>
+
+        <div class="popular-item">
+          <img src="smoked_brisket.png" alt="Smoked Brisket" class="item-image">
+          <h3>Smoked Brisket</h3>
+          <p>Yum</p>
+        </div>
+
+        <div class="popular-item">
+          <img src="churros.png" alt="Churros" class="item-image">
+          <h3>Churros</h3>
+          <p>Yum.</p>
+        </div>
+      </div>
+
+      <!-- Button to full menu -->
+      <a class="menu-button" href="menu.html">View Our Full Menu Here</a>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 Alma Tacos. All rights reserved.
+  </footer>
+
+  <!-- Java Code -->
+   <script>
+    // Observe when popular items enter the viewport
+    const observer = new IntersectionObserver(
+        (entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            // Stop observing once it's visible so it only animates once
+            observer.unobserve(entry.target);
+            }
+        });
+        },
+        {
+        threshold: 0.2 // trigger when ~20% of the card is visible
+        }
+    );
+
+    // Attach observer to each popular item card
+    document.querySelectorAll('.popular-item').forEach(item => {
+        observer.observe(item);
+    });
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact - Alma Tacos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* Global styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+      background-color: #f8f4e8;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Navigation bar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 1.25rem 1rem;
+      z-index: 1000;
+
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: none;
+      transition:
+        background-color 0.3s ease,
+        box-shadow 0.3s ease,
+        backdrop-filter 0.3s ease;
+    }
+
+    .navbar.scrolled {
+      background-color: #ffffff;
+      backdrop-filter: blur(0);
+      -webkit-backdrop-filter: blur(0);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo {
+      height: 40px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* logo swap */
+    .logo-light {
+      display: block;
+    }
+
+    .logo-dark {
+      display: none;
+    }
+
+    .navbar.scrolled .logo-light {
+      display: none;
+    }
+
+    .navbar.scrolled .logo-dark {
+      display: block;
+    }
+
+    .restaurant-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      position: relative;
+    }
+
+    .navbar.scrolled .nav-links a {
+      color: #777;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0;
+      height: 2px;
+      background: #de7560;
+      transition: width 0.25s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a.active {
+      color: #de7560;
+    }
+
+    .navbar.scrolled .nav-links a.active {
+      color: #de7560;
+    }
+
+    /* Order Button */
+    .order-button {
+      margin-left: 1.5rem;
+      padding: 0.55rem 1.2rem;
+      background-color: #de7560;
+      color: white;
+      border-radius: 999px;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      display: inline-block;
+      transition: opacity 0.25s ease;
+    }
+
+    .order-button:hover {
+      opacity: 0.9;
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      height: 60vh;
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: #fff;
+      margin-top: 0;
+    }
+
+    .hero-video {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      min-width: 100%;
+      min-height: 100%;
+      z-index: -2;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      z-index: -1;
+    }
+
+    .hero-image {
+      position: fixed;         
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+
+      object-fit: cover;
+      z-index: -2;
+    }
+
+    .hero-quote {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 900px;
+      text-align: center;
+      font-size: 2.4rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #fff;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      animation: quoteFadeUp 1.2s ease-out forwards;
+    }
+
+    @keyframes quoteFadeUp {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .hero-quote {
+        font-size: 1.8rem;
+      }
+    }
+
+    /* Main layout */
+    main {
+      margin: 0 auto;
+      padding: 0 1.5rem 0 1.5rem;
+      background-color: #f8f4e8;
+    }
+
+    section {
+      padding: 3rem 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+      padding-bottom: 4rem;
+    }
+
+    h1, h2 {
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    p {
+      max-width: 700px;
+    }
+
+    /* Contact Section */
+    .contact-section {
+      max-width: 700px;
+      margin: 0 auto;
+
+      opacity: 0;
+      transform: translateY(60px);
+      transition:
+        opacity 0.6s ease-out,
+        transform 0.6s ease-out;
+    }
+
+    .contact-section.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .contact-intro {
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-form {
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .form-field {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 0.6rem 0.7rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font: inherit;
+      background-color: #fffaf2;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 140px;
+    }
+
+    /* Reason checkboxes */
+    .contact-reasons-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    }
+
+    .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    margin-bottom: 1rem;
+    }
+
+    .checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    min-width: 16rem;
+    cursor: pointer;
+    }
+
+    .checkbox-option input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    cursor: pointer;
+    vertical-align: middle;
+    }
+
+
+    .contact-submit {
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #de7560;
+      color: #fff;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.9rem;
+      border: none;
+      cursor: pointer;
+      display: inline-block;
+      font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+      
+    }
+
+    .contact-submit:hover {
+      opacity: 0.9;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #777;
+      color: #fff;
+      padding: 2rem 1.5rem;
+      font-family: Arial, sans-serif;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+
+    .footer-section {
+      flex: 1;
+    }
+
+    .footer-logo {
+      width: 110px;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-center {
+      text-align: center;
+    }
+
+    .footer-address {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: #fff;
+    }
+
+    .footer-right {
+      text-align: right;
+    }
+
+    .privacy-link {
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .privacy-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 700px) {
+      .footer-inner {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .footer-right {
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .navbar {
+        padding: 0.6rem 1rem;
+      }
+      .restaurant-name {
+        display: none;
+      }
+
+      .contact-form {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-inner">
+      <div class="nav-left">
+        <a href="index.html">
+          <img src="Alma_Logo_Big_Light.png" alt="Alma Tacos Logo" class="logo logo-light">
+          <img src="Alma_Logo_Big_Dark.png"  alt="Alma Tacos Logo" class="logo logo-dark">
+        </a>
+        <span class="restaurant-name"></span>
+      </div>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="contact.html" class="active">Contact</a></li>
+        </ul>
+        <a class="order-button" href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr">ORDER NOW</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <img src="Alma Front.png" alt="Menu Hero Image" class="hero-image">
+
+    <div class="hero-quote">
+      Got Questions? We’d Love To Hear From You!
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main>
+    <section id="contact" class="contact-section">
+      <h1>Contact Us</h1>
+      <p class="contact-intro">
+        Have a question about the menu, catering, or planning a visit? Drop us a note below and we’ll get back to you as soon as we can.
+      </p>
+
+      <form class="contact-form" action="#" method="post">
+        <div class="form-row">
+          <div class="form-field">
+            <label for="first-name">First Name</label>
+            <input type="text" id="first-name" name="first_name" required>
+          </div>
+
+          <div class="form-field">
+            <label for="last-name">Last Name</label>
+            <input type="text" id="last-name" name="last_name" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+
+          <div class="form-field">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone">
+          </div>
+        </div>
+
+         <!-- reason checkboxes -->
+        <div class="form-row">
+            <div class="form-field" style="flex: 1 1 100%;">
+            <span class="contact-reasons-label">What would you like to contact us about?</span>
+            <div class="checkbox-group">
+                <label class="checkbox-option">
+                <input type="checkbox" name="reason[]" value="general_question">
+                <span>General Question</span>
+                </label>
+
+                <label class="checkbox-option">
+                <input type="checkbox" name="reason[]" value="food_experience">
+                <span>Food Experience</span>
+                </label>
+
+                <label class="checkbox-option">
+                <input type="checkbox" name="reason[]" value="issue">
+                <span>Issue</span>
+                </label>
+
+                <label class="checkbox-option">
+                <input type="checkbox" name="reason[]" value="hiring">
+                <span>Hiring</span>
+                </label>
+
+                <label class="checkbox-option">
+                <input type="checkbox" name="reason[]" value="catering">
+                <span>Catering</span>
+                </label>
+
+                <label class="checkbox-option">
+                <input type="checkbox" name="reason[]" value="business_request">
+                <span>Business Request</span>
+                </label>
+            </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field" style="flex: 1 1 100%;">
+            <label for="comments">Comments</label>
+            <textarea id="comments" name="comments" placeholder="How can we help?"></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="contact-submit">Send Message</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-section footer-left">
+        <ul class="footer-links">
+          <li><a href="index.html#home">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr">Order Now</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section footer-center">
+        <img src="Alma_Logo_Big_Light.png" class="footer-logo" alt="Alma Tacos Logo">
+        <div class="footer-address">
+          5514 E Britton Dr<br>
+          Long Beach, CA 90815
+        </div>
+      </div>
+
+      <div class="footer-section footer-right">
+        <a href="privacy.html" class="privacy-link">Privacy Policy</a><br>
+        &copy; 2025 Alma Tacos. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Contact section scroll-in animation
+    const contactSection = document.querySelector('.contact-section');
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    if (contactSection) {
+      observer.observe(contactSection);
+    }
+
+    // Navbar background change after hero
+    const navbar = document.querySelector('.navbar');
+    const hero = document.querySelector('.hero');
+
+    function handleNavBackground() {
+      if (!navbar || !hero) return;
+
+      const heroHeight = hero.offsetHeight;
+      const navHeight = navbar.offsetHeight;
+
+      if (window.scrollY > heroHeight - navHeight) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    }
+
+    window.addEventListener('scroll', handleNavBackground);
+    window.addEventListener('load', handleNavBackground);
+  </script>
+
+</body>
+</html>

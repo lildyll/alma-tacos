@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Menu - Alma Tacos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* Global styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+      background-color: #f8f4e8; /* off-white */
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Navigation bar */
+    .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.25rem 1rem;
+    z-index: 1000;
+
+    /* start translucent + blurred over video */
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: none;
+    transition:
+        background-color 0.3s ease,
+        box-shadow 0.3s ease,
+        backdrop-filter 0.3s ease;
+    }
+
+    /* solid style after scrolling past hero */
+    .navbar.scrolled {
+    background-color: #ffffff;
+    backdrop-filter: blur(0);
+    -webkit-backdrop-filter: blur(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    }
+
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo {
+      height: 40px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* default: show light logo, hide dark */
+    .logo-light {
+      display: block;
+    }
+
+    .logo-dark {
+      display: none;
+    }
+
+    /* when navbar is scrolled: swap them */
+    .navbar.scrolled .logo-light {
+      display: none;
+    }
+
+    .navbar.scrolled .logo-dark {
+      display: block;
+    }
+
+
+    .restaurant-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+
+    nav {
+        display: flex;
+        align-items: center;
+        }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      position: relative;
+    }
+
+    .navbar.scrolled .nav-links a {
+      color: #777;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0;
+      height: 2px;
+      background: #de7560;
+      transition: width 0.25s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links .active {
+      color: #de7560;
+    }
+
+    .navbar.scrolled .nav-links a.active {
+      color: #de7560;
+    }
+
+    /*Order Button*/
+    .order-button {
+    margin-left: 1.5rem;
+    padding: 0.55rem 1.2rem;
+    background-color: #de7560;
+    color: white;
+    border-radius: 999px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    display: inline-block;
+    transition: opacity 0.25s ease;
+    }
+
+    .order-button:hover {
+    opacity: 0.9;
+    }
+
+
+    /* Hero header with parallax-style video */
+    .hero {
+        position: relative;
+        height: 100vh;          /* full viewport height */
+        min-height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        color: #fff;
+        margin-top: 0;          /* no extra gap – video hugs the top */
+        }
+
+
+    .hero-video {
+      position: fixed;  /*parralax */
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      min-width: 100%;
+      min-height: 100%;
+      z-index: -2;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35); /* dark overlay for contrast */
+      z-index: -1;
+    }
+
+    .hero-overlay {
+    position: absolute;
+    /*bottom: 40px; /* adjust this if you want closer to the bottom */
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    padding: 1rem;
+    width: 100%;
+    }
+
+
+
+    .hero-logo {
+        max-width: 540px;
+        width: 60%;
+        height: auto;
+        filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+
+        /* animation starting state */
+        opacity: 0;
+        transform: translateY(20px);
+
+        /* animation */
+        animation: logoFadeUp 1.2s ease-out forwards;
+        }
+
+        /* keyframes */
+        @keyframes logoFadeUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        }
+
+
+    .hero-tagline {
+        position: absolute;
+        bottom: 40px; 
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        font-size: 1.2rem;
+        color: #fff; 
+        text-transform: uppercase;
+        }
+
+
+
+    /* Layout spacing for main content */
+    main {
+      margin: 0 auto;
+      padding: 0 1.5rem 0 1.5rem;
+      background-color: #f8f4e8;
+    }
+
+    section {
+      padding: 3rem 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+      padding-bottom: 4rem;
+    }
+
+    h1, h2 {
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    p {
+      max-width: 700px;
+    }
+
+    /* Popular items */
+    .popular-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .popular-item {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+
+    /* animation starting state */
+    opacity: 0;
+    transform: translateY(60px);
+    transition:
+        opacity 0.6s ease-out,
+        transform 0.6s ease-out;
+    }
+
+    /* when in view make it pop up */
+    .popular-item.in-view {
+    opacity: 1;
+    transform: translateY(0);
+    }
+
+    /* manually do each delay */
+    .popular-item:nth-child(1) {
+    transition-delay: 0.0s;
+    }
+    .popular-item:nth-child(2) {
+    transition-delay: 0.15s;
+    }
+    .popular-item:nth-child(3) {
+    transition-delay: 0.30s;
+    }
+    
+
+
+    .popular-item h3 {
+      margin-bottom: 0.25rem;
+    }
+
+    .popular-item p {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .popular-link {
+      text-decoration: none;
+      color: inherit;       
+      display: block;       
+    }
+
+    .popular-link:hover .popular-item {
+      transform: translateY(-3px);
+      transition: transform 0.2s ease;
+    }
+
+
+    .item-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+      background-color: #f8f4e8; 
+    }
+
+    /* Button */
+    .menu-button {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #de7560;
+      color: white;
+      border-radius: 999px;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+    }
+
+    .menu-button:hover {
+      opacity: 0.9;
+    }
+
+    footer {
+    background-color: #777;
+    color: #fff;
+    padding: 2rem 1.5rem;
+    font-family: Arial;
+  }
+
+  /* Reviews */
+/* Reviews Section */
+.reviews-section {
+  padding: 3rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* max 3 per row */
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 900px) {
+  .reviews-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.review-card {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  position: relative;
+  cursor: pointer;
+
+  /* scroll-in animation starting state */
+  opacity: 0;
+  transform: translateY(60px);
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out,
+    max-height 0.3s ease;
+  
+  /* collapsed state for "read more" */
+  max-height: 170px;      /* tweak for your content */
+  overflow: hidden;
+}
+
+/* when in view: animate in */
+.review-card.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* expanded review: show everything */
+.review-card.expanded {
+  max-height: 500px;      /* large enough for long reviews */
+}
+
+/* subtle quote mark */
+.review-card::before {
+  content: "“";
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  font-size: 2.4rem;
+  color: rgba(0, 0, 0, 0.06);
+  pointer-events: none;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.review-name {
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.review-rating { /*javert*/
+  font-size: 1.5rem;
+  color: #de7560;
+}
+
+.review-rating span {
+  margin-left: 2px;
+}
+
+.review-text {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 2;
+  /* extra bottom padding so text doesn't collide with caret */
+  padding-right: 1.75rem;
+}
+
+/* caret / arrow in bottom-right */
+.review-toggle {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  font-size: 0.85rem;
+  color: #777;
+  transition: transform 0.2s ease;
+  pointer-events: none; /* click handled on whole card */
+}
+
+/* rotate caret when expanded */
+.review-card.expanded .review-toggle {
+  transform: rotate(180deg);
+}
+
+/* About section */
+.about-section {
+  padding: 3rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+
+  /* animation starting state */
+  opacity: 0;
+  transform: translateY(60px);
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
+  transition-delay: 0.15s; /* slight delay so it floats up after others */
+}
+
+.about-section.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.about-text {
+  flex: 1;
+}
+
+.about-text p + p {
+  margin-top: 0.75rem;
+}
+
+.about-image-wrapper {
+  flex: 1;
+}
+
+.about-image {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Stack text/image on small screens */
+@media (max-width: 800px) {
+  .about-inner {
+    flex-direction: column;
+  }
+
+  .about-image-wrapper {
+    order: -1; /* image on top on mobile; remove if you want text first */
+  }
+}
+
+
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 2rem;
+}
+
+/* Sections */
+.footer-section {
+  flex: 1;
+}
+
+/* LEFT column */
+.footer-logo {
+  width: 110px;
+  margin-bottom: 1rem;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+/* CENTER column */
+.footer-center {
+  text-align: center; 
+}
+
+.footer-address {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #fff; 
+}
+
+
+/* allow the existing order-button style */
+.footer-order {
+  font-size: 2rem;
+}
+
+/* RIGHT column */
+.footer-right {
+  text-align: right;
+}
+
+.privacy-link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.privacy-link:hover {
+  text-decoration: underline;
+}
+
+/* Mobile adjustments */
+@media (max-width: 700px) {
+  .footer-inner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-right {
+    text-align: center;
+  }
+}
+
+
+    @media (max-width: 600px) {
+      .navbar {
+        padding: 0.6rem 1rem;
+      }
+      .restaurant-name {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-inner">
+      <div class="nav-left">
+        <!-- Logo links to home section -->
+        <a href="index.html">
+          <img src="Alma_Logo_Big_Light.png" alt="Alma Tacos Logo" class="logo logo-light">
+          <img src="Alma_Logo_Big_Dark.png"  alt="Alma Tacos Logo" class="logo logo-dark">
+        </a>
+        <span class="restaurant-name"></span>
+      </div>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          
+        </ul>
+        <a class="order-button" href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr">ORDER NOW</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero header with parallax video -->
+  <section class="hero">
+    <!-- This will be a video of making food -->
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="promovideo.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    <div class="hero-overlay">
+      <img src="Alma_Logo_Big_Light.png" alt="Alma Tacos Logo" class="hero-logo">
+    </div>
+    <p class="hero-tagline">Artisanal Tacos for the Whole Family!</p>
+  </section>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Home -->
+    <section id="home">
+      <h1>Alma Tacos</h1>
+      <p>All made from scratch, all made from here!</p>
+    </section>
+    
+    <!-- Popular Items -->
+    <section id="popular">
+      <h2>Popular Items</h2>
+      <p>A few of our crowd favorites:</p>
+
+      <div class="popular-grid">
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-chilebraised-beef-taco_5291154b-a041-4abe-91b1-d9d82032b553" class="popular-link">
+          <div class="popular-item">
+            <img src="Alma Restaurant Finals-17.jpg" alt="Chile-Braised Beef" class="item-image">
+            <h3>Chile-Braised Beef</h3>
+            <p>Pickled red onions, arbol salta, cilantro</p>
+          </div>
+        </a>
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-smoked-brisket-taco_5daee236-fb55-417f-a03a-2bb9452d54c7" class="popular-link">
+          <div class="popular-item">
+            <img src="Alma Restaurant Finals-11.jpg" alt="Smoked Brisket" class="item-image">
+            <h3>Smoked Brisket</h3>
+            <p>Guacamole, salsa roja, cilantro, onion</p>
+          </div>
+        </a>
+
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-churros_99a45b58-3ae5-4294-bd09-d37576e17962" class="popular-link">
+          <div class="popular-item">
+            <img src="Alma Restaurant Finals-52.jpg" alt="Churros" class="item-image">
+            <h3>Homemade Churros</h3>
+            <p>Served with chocolate dipping sauce</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Button to full menu -->
+      <a class="menu-button" href="menu.html">View Our Full Menu Here</a>
+    </section> 
+    
+        <!-- Reviews -->
+    <section id="reviews" class="reviews-section">
+      <h2>Reviews</h2>
+      <p>Don't just take our word for it!</p>
+
+      <div class="reviews-grid">
+
+        <article class="review-card">
+        <div class="review-header">
+          <div class="review-name">	Eric M.</div>
+          <div class="review-rating">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+        </div>
+        <p class="review-text">
+          Remarkable. The tacos are really good (most are slow cooked meats, but you can get cauliflower, Baja-style, too), 
+          the Chile verde burrito was the best burrito I've ever had, but the churros. Oh, dang. The churros.
+        </p>
+        <div class="review-toggle">⌄</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-header">
+          <div class="review-name">Deborah B.</div>
+          <div class="review-rating">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+        </div>
+        <p class="review-text">
+          Just checked out Alma Tacos. Fantastic food and warm atmosphere. We tried the smoked brisket, 
+          Baja cauliflower, and chile-braised beef tacos. All were delicious. The smoked brisket was our favorite.<br>
+          After finishing our tacos we ordered churros. These are not your average churros. So good and fresh!<br>
+          The restaurant seems small from the front but there is plenty of seating, including two nice patio areas.<br>
+          We'll be back!
+        </p>
+        <div class="review-toggle">⌄</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-header">
+          <div class="review-name">Michelle N.</div>
+          <div class="review-rating">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+        </div>
+        <p class="review-text">
+          Was in the area and saw this new restaurant opened. Stopped in for some churros, and they were delicious! 
+          I am a churro connoisseur! Fresh from the fryer, ample amount of cinnamon and sugar and they are only $5 for 4 churros! 
+          Excited to support this family owned business and come back in for some tacos! They all sounded really good in the menu. 
+          The kids meal looked great for kids too
+        </p>
+        <div class="review-toggle">⌄</div>
+      </article>
+
+    <article class="review-card">
+        <div class="review-header">
+          <div class="review-name">Ryan H.</div>
+          <div class="review-rating">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+        </div>
+        <p class="review-text">
+          The food is amazing!! Perfect if your the type that wants the salt light and to add what you prefer on yourself 
+          and the flavor is not compromised! The smoked brokers tacos were super on point! Extremely tender like biting 
+          through butter with the perfect amount of smoke and flavor complemented with a generous amount of guacamole and 
+          salsa that's spicy but not to the point that you need water! I was very impressed with the food and especially the service! 
+          Everyone was very attentive to my children whom are 3 and 4 and their requests. This is definitely a great family location 
+          as well as a casual dating spot. The music was enjoyable and relaxing vibe wise. I'm definitely coming back next time when 
+          we have more time to try more things out!
+        </p>
+        <div class="review-toggle">⌄</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-header">
+          <div class="review-name">	Maria D.</div>
+          <div class="review-rating">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+        </div>
+        <p class="review-text">
+          The food packs an amazing flavor punch. Not just your simple street tacos. The cauliflower taco 
+          was the surprise hit of the night. I could have eaten three they were so tasty. MUST end with the fresh churros 
+          in chocolate sauce.
+        </p>
+        <div class="review-toggle">⌄</div>
+      </article>
+
+      <article class="review-card">
+        <div class="review-header">
+          <div class="review-name">	Vanessa B. </div>
+          <div class="review-rating">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+        </div>
+        <p class="review-text">
+          We got one of each meat taco, a quesadilla with slow cooked beef, and a kids meal. 
+          Every single one of them was delicious! Our daughter loved the kids quesadilla, the honest juice and everything! 
+          A few of the tacos do have a little kick to them for those who are not good with spicy. I'm a wimp with that stuff 
+          but still enjoyed them very much!!!! Service was great, very friendly and accommodating. We love the light fixtures 
+          and ambiance. Excited to see this place grow and flourish!
+      
+        </p>
+        <div class="review-toggle">⌄</div>
+      </article>
+    </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+      <div class="about-inner">
+        <div class="about-text">
+          <h2>About Us</h2>
+          <p>
+            <i>Alma Tacos</i> is a chef-driven, community-rooted taco shop celebrating authentic Mexican street flavors. <br><br>
+            We make everything from scratch, using fresh, artisanal ingredients that honor tradition while exploring fun fusion 
+            possibilities. <br><br>
+            Our fast-casual style keeps things welcoming and easy, while the food stays bold, soulful, 
+            and made with heart.
+          </p>
+        </div>
+
+        <div class="about-image-wrapper">
+          <img src="kid_chowing_down_churro.jpg" alt="Enjoy Alma Tacos!" class="about-image">
+        </div>
+      </div>
+    </section>
+
+
+
+  </main>
+
+  <footer>
+  <div class="footer-inner">
+
+    <!-- LEFT SECTION -->
+    <div class="footer-section footer-left">
+      
+      
+      <ul class="footer-links">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr">Order Now</a></li>
+      </ul>
+    </div>
+
+    <!-- CENTER SECTION -->
+    <div class="footer-section footer-center">
+      <img src="Alma_Logo_Big_Light.png" class="footer-logo" alt="Alma Tacos Logo">
+
+      <div class="footer-address">
+        5514 E Britton Dr<br>
+        Long Beach, CA 90815
+      </div>
+    </div>
+
+
+    <!-- RIGHT SECTION -->
+    <div class="footer-section footer-right">
+      <a href="privacy.html" class="privacy-link">Privacy Policy</a><br>
+      &copy; 2025 Alma Tacos. All rights reserved.
+    </div>
+
+  </div>
+</footer>
+
+
+  <!-- Java Code -->
+   <script>
+  // Popular items animation
+  // Popular items + reviews scroll-in animation
+const observer = new IntersectionObserver(
+  (entries, observerInstance) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observerInstance.unobserve(entry.target);
+      }
+    });
+  },
+  {
+    threshold: 0.2
+  }
+);
+
+document
+  .querySelectorAll('.popular-item, .review-card, .about-section')
+  .forEach(item => observer.observe(item));
+
+// Click-to-expand reviews
+document.querySelectorAll('.review-card').forEach(card => {
+  card.addEventListener('click', () => {
+    card.classList.toggle('expanded');
+  });
+});
+
+
+  // Navbar background change after hero
+  const navbar = document.querySelector('.navbar');
+  const hero = document.querySelector('.hero');
+
+  function handleNavBackground() {
+    if (!navbar || !hero) return;
+
+    const heroHeight = hero.offsetHeight;
+    const navHeight = navbar.offsetHeight;
+
+    // when the scroll passes the hero area, make navbar solid
+    if (window.scrollY > heroHeight - navHeight) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  }
+
+  window.addEventListener('scroll', handleNavBackground);
+  window.addEventListener('load', handleNavBackground);
+</script>
+
+
+
+</body>
+</html>

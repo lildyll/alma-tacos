@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Menu - Alma Tacos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+
+
+  <style>
+    /* Global styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+      background-color: #f8f4e8; /* off-white */
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Navigation bar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 1.25rem 1rem;
+      z-index: 1000;
+
+      /* start translucent + blurred over video */
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: none;
+      transition:
+        background-color 0.3s ease,
+        box-shadow 0.3s ease,
+        backdrop-filter 0.3s ease;
+    }
+
+    /* solid style after scrolling past hero */
+    .navbar.scrolled {
+      background-color: #ffffff;
+      backdrop-filter: blur(0);
+      -webkit-backdrop-filter: blur(0);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo {
+      height: 40px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* default: show light logo, hide dark */
+    .logo-light {
+      display: block;
+    }
+
+    .logo-dark {
+      display: none;
+    }
+
+    /* when navbar is scrolled: swap them */
+    .navbar.scrolled .logo-light {
+      display: none;
+    }
+
+    .navbar.scrolled .logo-dark {
+      display: block;
+    }
+
+    .restaurant-name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      position: relative;
+    }
+
+    .navbar.scrolled .nav-links a {
+      color: #777;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0;
+      height: 2px;
+      background: #de7560;
+      transition: width 0.25s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links .active {
+      color: #de7560;
+    }
+
+    .navbar.scrolled .nav-links a.active {
+      color: #de7560;
+    }
+
+    /* Order Button */
+    .order-button {
+      margin-left: 1.5rem;
+      padding: 0.55rem 1.2rem;
+      background-color: #de7560;
+      color: white;
+      border-radius: 999px;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      display: inline-block;
+      transition: opacity 0.25s ease;
+    }
+
+    .order-button:hover {
+      opacity: 0.9;
+    }
+
+    /* Hero header with parallax-style video */
+    .hero {
+      position: relative;
+      height: 60vh;          /* a bit shorter for menu page */
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: #fff;
+      margin-top: 0;
+    }
+
+    .hero-video {
+      position: fixed;  /* parallax */
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      min-width: 100%;
+      min-height: 100%;
+      z-index: -2;
+    }
+
+    .hero-image {
+      position: fixed;         
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+
+      object-fit: cover;
+      z-index: -2;
+    }
+
+    .hero-quote {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      
+      width: 90%;
+      max-width: 900px;
+
+      text-align: center;
+      font-size: 3rem;          /* Large quote */
+      font-weight: 600;
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      line-height: 1.3;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+
+      opacity: 0;
+      animation: quoteFadeUp 1.2s ease-out forwards;
+    }
+
+    @media (max-width: 700px) {
+      .hero-quote {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .hero-quote {
+        font-size: 1.6rem;
+      }
+    }
+
+    @keyframes quoteFadeUp {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+      }
+      100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35); /* dark overlay for contrast */
+      z-index: -1;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      padding: 1rem;
+      width: 100%;
+    }
+
+    .hero-logo {
+      max-width: 260px;
+      width: 60%;
+      height: auto;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+
+      opacity: 0;
+      transform: translateY(20px);
+      animation: logoFadeUp 1.2s ease-out forwards;
+    }
+
+    @keyframes logoFadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-tagline {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      font-size: 1.4rem;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Layout spacing for main content */
+    main {
+      margin: 0 auto;
+      padding: 0 1.5rem 0 1.5rem;
+      background-color: #f8f4e8;
+    }
+
+    section {
+      padding: 3rem 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+      padding-bottom: 4rem;
+    }
+
+    h1, h2 {
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    p {
+      max-width: 700px;
+    }
+
+    /* Grid for menu items - same as popular on index */
+    .popular-grid {
+      display: grid;
+       grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    @media (max-width: 900px) { /*go to 2 per row if screen is small*/
+      .popular-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+}
+    .popular-item {
+      background: #ffffff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+      position: relative;
+      font-family: 'Montserrat', sans-serif;
+
+      opacity: 0;
+      transform: translateY(60px);
+      transition:
+        opacity 0.6s ease-out,
+        transform 0.6s ease-out;
+    }
+
+    .popular-item.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .popular-item:nth-child(1) { transition-delay: 0s; }
+    .popular-item:nth-child(2) { transition-delay: 0.15s; }
+    .popular-item:nth-child(3) { transition-delay: 0.30s; }
+
+    .popular-item h3 {
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+    }
+
+    .popular-item p {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .popular-link {
+      text-decoration: none;
+      color: inherit;       
+      display: block;       
+    }
+
+    .popular-link:hover .popular-item {
+      transform: translateY(-3px);
+      transition: transform 0.2s ease;
+    }
+
+    .new-badge {
+      position: absolute;
+      top: -10px;       
+      left: -10px;     
+
+      background-color: #de7560;
+      color: white;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: bold;
+
+      z-index: 10;          /* stays above image */
+      pointer-events: none; /* doesn’t block clicks */
+    }
+
+
+
+    .item-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+      background-color: #f8f4e8;
+    }
+
+    /* Button */
+    .menu-button {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #de7560;
+      color: white;
+      border-radius: 999px;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+    }
+
+    .menu-button:hover {
+      opacity: 0.9;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #777;
+      color: #fff;
+      padding: 2rem 1.5rem;
+      font-family: Arial;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+
+    .footer-section {
+      flex: 1;
+    }
+
+    .footer-logo {
+      width: 110px;
+      margin-bottom: 1rem;
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-center {
+      text-align: center;
+    }
+
+    .footer-address {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: #fff;
+    }
+
+    .footer-right {
+      text-align: right;
+    }
+
+    .privacy-link {
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .privacy-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 700px) {
+      .footer-inner {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .footer-right {
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .navbar {
+        padding: 0.6rem 1rem;
+      }
+      .restaurant-name {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-inner">
+      <div class="nav-left">
+        <a href="index.html">
+          <img src="Alma_Logo_Big_Light.png" alt="Alma Tacos Logo" class="logo logo-light">
+          <img src="Alma_Logo_Big_Dark.png"  alt="Alma Tacos Logo" class="logo logo-dark">
+        </a>
+        <span class="restaurant-name"></span>
+      </div>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a class="active">Menu</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <a class="order-button" href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr">ORDER NOW</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero header -->
+    <section class="hero">
+      <img src="tacoplates_white_bg.jpg" alt="Menu Hero Image" class="hero-image">
+
+      
+      <div class="hero-quote">
+  All made from scratch.<br>All made from here!
+</div>
+
+      <div class="hero-tagline">OUR MENU</div>
+    </section>
+
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Intro -->
+    <section>
+      <h1>Explore Our Menu</h1>
+      <p></p>
+    </section>
+
+    <!-- FEATURED -->
+    <section id="featured">
+      <h2>Featured Favorites</h2>
+      <p></p>
+
+      <div class="popular-grid">
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-smoked-chicken-taco_96956a26-9b73-4cd7-9719-af5b1f717369" class="popular-link">
+          <div class="popular-item new">
+            <span class="new-badge">NEW</span>
+              <img src="Alma Restaurant Finals-32.jpg" alt="Smoked Chicken Taco" class="item-image">
+              <h3>Smoked Chicken Taco</h3>
+              <p>Guacamole, onion, cilantro, salsa roja</p>
+          </div>
+        </a>
+
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-fiesta-nachos_d1cc2a42-4764-4a88-b7e6-e26b70163a72" class="popular-link">
+          <div class="popular-item new">
+            <span class="new-badge">NEW</span>
+              <img src="Alma Restaurant Finals-46.jpg" alt="Fiesta Nachos" class="item-image">
+              <h3>Fiesta Nachos</h3>
+              <p>Choice of meat, cheese, beans, guac, tomato, jalepenos, pickled red onions, 
+                queso fresco , cilantro, chipotle aioli, arbol salsa
+              </p>
+            </div>
+          </a>
+
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-california-burrito_56bfe5cb-fe82-4d5a-afbe-47ed86238345" class="popular-link">
+          <div class="popular-item new">
+            <span class="new-badge">NEW</span>
+              <img src="Alma Restaurant Finals-47.jpg" alt="California Burrito" class="item-image">
+              <h3>California Burrito</h3>
+              <p>Al pastor (or other meat), fries, beans, guac, sour cream, chipotle aioli, arbol salsa</p>
+          </div>
+        </a>
+      </div>
+    </section>
+    <!-- TACOS -->
+    <section id="tacos">
+      <h2>Tacos</h2>
+      <p></p>
+
+      <div class="popular-grid">
+      <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-smoked-chicken-taco_96956a26-9b73-4cd7-9719-af5b1f717369" class="popular-link">
+          <div class="popular-item new">
+            <span class="new-badge">NEW</span>
+              <img src="Alma Restaurant Finals-32.jpg" alt="Smoked Chicken Taco" class="item-image">
+              <h3>Smoked Chicken Taco</h3>
+              <p>Guacamole, onion, cilantro, salsa roja</p>
+          </div>
+        </a>
+
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-smoked-brisket-taco_5daee236-fb55-417f-a03a-2bb9452d54c7" class="popular-link">
+          <div class="popular-item">
+            <img src="Alma Restaurant Finals-11.jpg" alt="Smoked Brisket" class="item-image">
+            <h3>Smoked Brisket</h3>
+            <p>Guacamole, salsa roja, cilantro, onion</p>
+          </div>
+        </a>
+
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-chilebraised-beef-taco_5291154b-a041-4abe-91b1-d9d82032b553" class="popular-link">
+          <div class="popular-item">
+            <img src="Alma Restaurant Finals-17.jpg" alt="Chile-Braised Beef" class="item-image">
+            <h3>Chile-Braised Beef</h3>
+            <p>Pickled red onions, arbol salta, cilantro</p>
+          </div>
+        </a>
+
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-al-pastor-taco_978ab342-a35c-4339-b279-2461fdf45142" class="popular-link">
+          <div class="popular-item">
+            <img src="Alma Restaurant Finals-23.jpg" alt="Al Pastor" class="item-image">
+            <h3>Al Pastor</h3>
+            <p>Roasted pineapple, salsa verde, cilantro, onion</p>
+          </div>
+        </a>
+
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-chile-verde-taco_1d2587ca-28f3-432e-a7f4-1861369eb231" class="popular-link">
+          <div class="popular-item">
+            <img src="Alma Restaurant Finals-28.jpg" alt="Pork Chile Verde" class="item-image">
+            <h3>Pork Chile Verde</h3>
+            <p>Pickled white onions, avo-tomatillo salsa, queso fresco, cilantro</p>
+          </div>
+        </a>
+        
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-baja-cauliflower-taco_25d876a4-7432-4948-a6a4-8664daa795f5" class="popular-link">
+          <div class="popular-item">
+            <img src="Alma Restaurant Finals-42.jpg" alt="Baja Cauliflower" class="item-image">
+            <h3>Baja Cauliflower</h3>
+            <p>Cabbage pico, pickled onion, chipotle aioli, mago-lime butter, cilantro</p>
+          </div>
+        </a>
+
+      
+      </div> 
+    </section>
+
+    <!-- BURRITOS -->
+    <section id="burritos">
+      <h2>Burritos</h2>
+      <p></p>
+
+      <div class="popular-grid">
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-california-burrito_56bfe5cb-fe82-4d5a-afbe-47ed86238345" class="popular-link">
+          <div class="popular-item new">
+            <span class="new-badge">NEW</span>
+              <img src="Alma Restaurant Finals-47.jpg" alt="California Burrito" class="item-image">
+              <h3>California Burrito</h3>
+              <p>Al pastor (or other meat), fries, beans, guac, sour cream, chipotle aioli, arbol salsa</p>
+          </div>
+        </a>
+
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-burrito-wmeat_06b03262-73b2-4ccd-9373-2b6a0d806696" class="popular-link">
+        <div class="popular-item">
+          <img src="Alma Restaurant Finals-44.jpg" alt="With Meat" class="item-image">
+          <h3>With Meat</h3>
+          <p>Pinto beans, cheese, guac, tomato, pickled jalepeno, salsa</p>
+        </div>
+        </a>
+
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-burrito-beans-only_a4e1b44e-4d9b-4e26-8432-9c4bee2f3cc4" class="popular-link">
+        <div class="popular-item">
+          <img src="Alma Restaurant Finals-44.jpg" alt="Beans Only" class="item-image">
+          <h3>Beans Only</h3>
+          <p>Pinto beans, cheese, guac, tomato, pickled jalepeno, salsa</p>
+        </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- QUESADILLAS -->
+    <section id="quesadillas">
+      <h2>Quesadillas</h2>
+      <p></p>
+
+      <div class="popular-grid">
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-quesadillacheese-only_da376b5b-6c27-49bc-8787-365391608587" class="popular-link">
+        <div class="popular-item">
+          <img src="Alma Restaurant Finals-59.jpg" alt="Cheese Only" class="item-image">
+          <h3>Cheese Only</h3>
+          <p>Guacamole, sour cream, salsa</p>
+        </div>
+        </a>
+
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-quesadilla_4f2ae385-625e-445e-afb5-b6698a744ecf" class="popular-link">
+        <div class="popular-item">
+          <img src="Alma Restaurant Finals-54.jpg" alt="With Meat" class="item-image">
+          <h3>With Meat</h3>
+          <p>Guacamole, sour cream, salsa</p>
+        </div>
+        </a>
+
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-kids-meal_d4ec8167-c9af-454b-a3fd-bbdaa7f6af1b" class="popular-link">
+        <div class="popular-item">
+          <img src="Alma Restaurant Finals-58.jpg" alt="Kid's Meal" class="item-image">
+          <h3>Kid's Meal</h3>
+          <p>Kid's quesadilla, apple sauce, chorro, juice/milk</p>
+        </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- SIDES & SALSAS -->
+    <section id="sides">
+      <h2>Sides &amp; Salsas</h2>
+      <p></p>
+
+      <div class="popular-grid">
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-fiesta-nachos_d1cc2a42-4764-4a88-b7e6-e26b70163a72" class="popular-link">
+        <div class="popular-item new">
+          <span class="new-badge">NEW</span>
+            <img src="Alma Restaurant Finals-46.jpg" alt="Fiesta Nachos" class="item-image">
+            <h3>Fiesta Nachos</h3>
+            <p>Choice of meat, cheese, beans, guac, tomato, jalepenos, pickled red onions, 
+              queso fresco , cilantro, chipotle aioli, arbol salsa
+            </p>
+        </div>
+        </a>
+
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-chips-salsa_2225979c-9c69-4e32-bfb3-0cac4e5f792b" class="popular-link">
+        <div class="popular-item">
+          <img src="Alma Restaurant Finals-45.jpg" alt="Chips and Salsa" class="item-image">
+          <h3>Chips &amp; Salsa </h3>
+          <p>Housemade chips with choice of salsa</p>
+        </div>
+        </a>
+
+        <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-chips-guacamole_1a00c7d7-af3a-4497-9ce9-56a0d3475d71" class="popular-link">
+        <div class="popular-item">
+          <img src="Alma Restaurant Finals-7.jpg" alt="Chips and Guacamole" class="item-image">
+          <h3>Chips &amp; Guacamole </h3>
+          <p>Housemade chips with guacamole</p>
+        </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- DESSERTS -->
+    <section id="desserts">
+      <h2>Desserts</h2>
+      <p></p>
+
+      <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-churros_99a45b58-3ae5-4294-bd09-d37576e17962" class="popular-link">
+        <div class="popular-grid">
+          <div class="popular-item">
+            <img src="Alma Restaurant Finals-52.jpg" alt="Churros" class="item-image">
+            <h3>Homemade Churros</h3>
+            <p>Served with chocolate dipping sauce</p>
+          </div>
+        </a>
+
+
+      </div>
+    </section>
+
+    <!-- DRINKS -->
+    <section id="drinks">
+      <h2>Drinks</h2>
+      <p></p>
+
+      <div class="popular-grid">
+        <div class="popular-item">
+          <!--img src="" alt="Soft Drink" class="item-image"-->
+          <h3>Soft Drink</h3>
+          <p></p>
+        </div>
+
+        <div class="popular-item">
+          <!--img src="" alt="Juice" class="item-image"-->
+          <h3>Juice</h3>
+          <p></p>
+        </div>
+
+        <div class="popular-item">
+          <!--img src="" alt="Milk" class="item-image"-->
+          <h3>Milk</h3>
+          <p></p>
+        </div>
+
+        <div class="popular-item">
+          <!--img src="" alt="Smart Water" class="item-image"-->
+          <h3>Smart Water</h3>
+          <p></p>
+        </div>
+
+        <div class="popular-item">
+          <!--img src="" alt="Topo Chico" class="item-image"-->
+          <h3>Topo Chico</h3>
+          <p></p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+
+      <!-- LEFT SECTION -->
+      <div class="footer-section footer-left">
+        <ul class="footer-links">
+          <li><a href="index.html#home">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr">Order Now</a></li>
+        </ul>
+      </div>
+
+      <!-- CENTER SECTION -->
+      <div class="footer-section footer-center">
+        <img src="Alma_Logo_Big_Light.png" class="footer-logo" alt="Alma Tacos Logo">
+
+        <div class="footer-address">
+          5514 E Britton Dr<br>
+          Long Beach, CA 90815
+        </div>
+      </div>
+
+      <!-- RIGHT SECTION -->
+      <div class="footer-section footer-right">
+        <a href="privacy.html" class="privacy-link">Privacy Policy</a><br>
+        &copy; 2025 Alma Tacos. All rights reserved.
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Animate menu cards on scroll
+    const observer = new IntersectionObserver(
+      (entries, observerInstance) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observerInstance.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    document.querySelectorAll('.popular-item').forEach(item => {
+      observer.observe(item);
+    });
+
+    // Navbar background change after hero
+    const navbar = document.querySelector('.navbar');
+    const hero = document.querySelector('.hero');
+
+    function handleNavBackground() {
+      if (!navbar || !hero) return;
+
+      const heroHeight = hero.offsetHeight;
+      const navHeight = navbar.offsetHeight;
+
+      if (window.scrollY > heroHeight - navHeight) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    }
+
+    window.addEventListener('scroll', handleNavBackground);
+    window.addEventListener('load', handleNavBackground);
+  </script>
+
+</body>
+</html>
