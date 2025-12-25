@@ -185,7 +185,7 @@
 
     .hero-video {
       position: fixed;  /*parralax */
-      top: 50%;
+      top: 10%;
       left: 50%;
       transform: translate(-50%, -50%);
       min-width: 100%;
@@ -317,11 +317,10 @@
     .popular-item:nth-child(3) {
     transition-delay: 0.30s;
     }
-    
-
 
     .popular-item h3 {
       margin-bottom: 0.25rem;
+      text-transform: uppercase;
     }
 
     .popular-item p {
@@ -375,6 +374,76 @@
     padding: 2rem 1.5rem;
     font-family: Arial;
   }
+
+/* Hours Section */
+.hours-section {
+
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.hours-section.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hours-card {
+  margin-top: 1rem;
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.hours-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hours-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.85rem 0.5rem;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.hours-row:last-child {
+  border-bottom: none;
+}
+
+.hours-day {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.hours-time {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* Highlight today */
+.hours-row.is-today {
+  background: rgba(222, 117, 96, 0.14);
+  border-radius: 8px;
+  border-bottom: none;
+  margin: 0.35rem 0;
+  padding: 1rem 0.75rem;
+}
+
+.hours-row.is-today .hours-day {
+  color: #de7560;
+}
+
+.hours-row.is-today .hours-time {
+  color: #333;
+  font-weight: 700;
+}
+
 
   /* Reviews */
 /* Reviews Section */
@@ -667,6 +736,7 @@
         <ul class="nav-links">
           <li><a href="index.html" class="active">Home</a></li>
           <li><a href="menu.html">Menu</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
           <li><a href="index.html#about">About</a></li>
           <li><a href="contact.html">Contact</a></li>
           
@@ -680,7 +750,7 @@
   <section class="hero">
     <!-- This will be a video of making food -->
     <video class="hero-video" autoplay muted loop playsinline>
-      <source src="promovideo.mp4" type="video/mp4">
+      <source src="Alma Promo Background Video.MOV" type="video/mp4">
       Your browser does not support the video tag.
     </video>
 
@@ -693,11 +763,11 @@
   <!-- Main Content -->
   <main>
 
-    <!-- Home -->
+    <!-- Home 
     <section id="home">
       <h1>Alma Tacos</h1>
-      <p>All made from scratch, all made from here!</p>
-    </section>
+      <p>5514 E Britton Dr<br>Long Beach, CA 90815</p>
+    </section>-->
     
     <!-- Popular Items -->
     <section id="popular">
@@ -724,7 +794,7 @@
           <div class="popular-item">
             <img src="Alma Restaurant Finals-52.jpg" alt="Churros" class="item-image">
             <h3>Homemade Churros</h3>
-            <p>Served with chocolate dipping sauce</p>
+            <p><br></p>
           </div>
         </a>
       </div>
@@ -733,6 +803,46 @@
       <a class="menu-button" href="menu.html">View Our Full Menu Here</a>
     </section> 
     
+      <!-- Hours -->
+  <section id="hours" class="hours-section">
+    <h2>Hours</h2>
+    <p>Come visit!</p>
+
+    <div class="hours-card">
+      <ul class="hours-list">
+        <li class="hours-row" data-day="0">
+          <span class="hours-day">Sunday</span>
+          <span class="hours-time">12:00 PM - 8:00 PM</span>
+        </li>
+        <li class="hours-row" data-day="1">
+          <span class="hours-day">Monday</span>
+          <span class="hours-time">Closed</span>
+        </li>
+        <li class="hours-row" data-day="2">
+          <span class="hours-day">Tuesday</span>
+          <span class="hours-time">11:30 AM - 8:00 PM</span>
+        </li>
+        <li class="hours-row" data-day="3">
+          <span class="hours-day">Wednesday</span>
+          <span class="hours-time">11:30 AM - 8:00 PM</span>
+        </li>
+        <li class="hours-row" data-day="4">
+          <span class="hours-day">Thursday</span>
+          <span class="hours-time">11:30 AM - 8:00 PM</span>
+        </li>
+        <li class="hours-row" data-day="5">
+          <span class="hours-day">Friday</span>
+          <span class="hours-time">11:30 AM - 9:00 PM</span>
+        </li>
+        <li class="hours-row" data-day="6">
+          <span class="hours-day">Saturday</span>
+          <span class="hours-time">12:00 PM - 9:00 PM</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+
         <!-- Reviews -->
     <section id="reviews" class="reviews-section">
       <h2>Reviews</h2>
@@ -875,6 +985,7 @@
       <ul class="footer-links">
         <li><a href="index.html#home">Home</a></li>
         <li><a href="menu.html">Menu</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
         <li><a href="index.html#about">About</a></li>
         <li><a href="#contact">Contact</a></li>
         <li><a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr">Order Now</a></li>
@@ -952,6 +1063,15 @@ document.querySelectorAll('.review-card').forEach(card => {
 
   window.addEventListener('scroll', handleNavBackground);
   window.addEventListener('load', handleNavBackground);
+
+  // Highlight current day in Hours section
+  const _today = new Date().getDay(); // 0=Sun ... 6=Sat
+  const _todayRow = document.querySelector(`.hours-row[data-day="${_today}"]`);
+  if (_todayRow) _todayRow.classList.add('is-today');
+
+  // Include hours section in scroll-in animations (since you're using one observer)
+  document.querySelectorAll('.hours-section').forEach(item => observer.observe(item));
+
 </script>
 
 

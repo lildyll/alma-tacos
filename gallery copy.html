@@ -2,11 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Contact - Alma Tacos</title>
+  <title>Gallery - Alma Tacos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
-
-  <link rel="icon" type="image/x-icon" href="Alma_Logo_Big_Light.png"> 
 
   <style>
     /* Global styles */
@@ -194,33 +192,25 @@
       z-index: -1;
     }
 
-    .hero-image {
-      position: fixed;         
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-
-      object-fit: cover;
-      z-index: -2;
-    }
-
     .hero-quote {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      
       width: 90%;
       max-width: 900px;
+
       text-align: center;
-      font-size: 2.4rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      font-size: 3rem;          /* Large quote */
+      font-weight: 600;
+      font-family: 'Montserrat', sans-serif;
       color: #fff;
-      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      line-height: 1.3;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+
       opacity: 0;
       animation: quoteFadeUp 1.2s ease-out forwards;
     }
@@ -270,9 +260,8 @@
       max-width: 700px;
     }
 
-    /* Contact Section */
-    .contact-section {
-      max-width: 700px;
+    /* Gallery Section */
+    .gallery-section {
       margin: 0 auto;
 
       opacity: 0;
@@ -282,109 +271,151 @@
         transform 0.6s ease-out;
     }
 
-    .contact-section.in-view {
+    .gallery-section.in-view {
       opacity: 1;
       transform: translateY(0);
     }
 
-    .contact-intro {
+    .gallery-intro {
       margin-bottom: 1.5rem;
     }
 
-    .contact-form {
-      background: #ffffff;
-      padding: 2rem;
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-    }
-
-    .form-row {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-    }
-
-    .form-field {
-      flex: 1;
-      min-width: 180px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.35rem;
-      font-size: 0.85rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      padding: 0.6rem 0.7rem;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      font: inherit;
-      background-color: #fffaf2;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 140px;
-    }
-
-    /* Reason checkboxes */
-    .contact-reasons-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.85rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    }
-
-    .checkbox-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem 1.5rem;
-    margin-bottom: 1rem;
-    }
-
-    .checkbox-option {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.9rem;
-    min-width: 16rem;
-    cursor: pointer;
-    }
-
-    .checkbox-option input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    margin: 0;
-    cursor: pointer;
-    vertical-align: middle;
-    }
-
-
-    .contact-submit {
-      margin-top: 1rem;
-      padding: 0.75rem 1.5rem;
-      background-color: #de7560;
-      color: #fff;
-      border-radius: 999px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 0.9rem;
-      border: none;
+      background: #ffffff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
       cursor: pointer;
-      display: inline-block;
-      font-family: 'Montserrat', Arial, Helvetica, sans-serif;
-      
+
+      opacity: 0;
+      transform: translateY(60px);
+      transition:
+        opacity 0.6s ease-out,
+        transform 0.6s ease-out,
+        transform 0.25s ease-out,
+        box-shadow 0.25s ease-out;
     }
 
-    .contact-submit:hover {
-      opacity: 0.9;
+    .gallery-item.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .gallery-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.25s ease-out;
+    }
+
+    .gallery-item:hover .gallery-image {
+      transform: scale(1.05);
+    }
+
+    .gallery-item:hover {
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+      transform: translateY(-3px);
+    }
+
+    /* Lightbox overlay */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .lightbox.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .lightbox-content {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox-image {
+      max-width: 75%;
+      max-height: 75%;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      font-size: 1.6rem;
+      color: #fff;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .lightbox-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2.5rem;
+      color: #fff;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0 0.5rem;
+      user-select: none;
+    }
+
+    .lightbox-arrow.prev {
+      left: -40px;
+    }
+
+    .lightbox-arrow.next {
+      right: -40px;
+    }
+
+    @media (max-width: 700px) {
+      .lightbox-arrow.prev {
+        left: 10px;
+      }
+      .lightbox-arrow.next {
+        right: 10px;
+      }
+      .lightbox-close {
+        top: -36px;
+        right: 10px;
+      }
     }
 
     /* Footer */
@@ -478,10 +509,6 @@
       .restaurant-name {
         display: none;
       }
-
-      .contact-form {
-        padding: 1.5rem;
-      }
     }
   </style>
 </head>
@@ -503,9 +530,9 @@
         <ul class="nav-links">
           <li><a href="index.html">Home</a></li>
           <li><a href="menu.html">Menu</a></li>
-          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="gallery.html" class = "active">Gallery</a></li>
           <li><a href="index.html#about">About</a></li>
-          <li><a href="contact.html" class="active">Contact</a></li>
+          <li><a href="contact.html">Contact</a></li>
         </ul>
         <a class="order-button" href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr">ORDER NOW</a>
       </nav>
@@ -514,95 +541,56 @@
 
   <!-- Hero -->
   <section class="hero">
-    <img src="Alma Front.png" alt="Menu Hero Image" class="hero-image">
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="promovideo.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
 
     <div class="hero-quote">
-      Got Questions? We’d Love To Hear From You!
+      Moments From Alma Tacos
     </div>
   </section>
 
   <!-- Main Content -->
   <main>
-    <section id="contact" class="contact-section">
-      <h1>Contact Us</h1>
-      <p class="contact-intro">
-        Have a question about the menu, catering, or planning a visit? Drop us a note below and we’ll get back to you as soon as we can.
+    <section class="gallery-section">
+      <h1>Photo Gallery</h1>
+      <p class="gallery-intro">
+        
       </p>
 
-      <form class="contact-form" action="#" method="post">
-        <div class="form-row">
-          <div class="form-field">
-            <label for="first-name">First Name</label>
-            <input type="text" id="first-name" name="first_name" required>
-          </div>
-
-          <div class="form-field">
-            <label for="last-name">Last Name</label>
-            <input type="text" id="last-name" name="last_name" required>
-          </div>
+      <div class="gallery-grid">
+        <div class="gallery-item">
+          <img src="Alma Restaurant Finals-1.jpg" alt="Tacos and salsas" class="gallery-image">
         </div>
-
-        <div class="form-row">
-          <div class="form-field">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
-          </div>
-
-          <div class="form-field">
-            <label for="phone">Phone</label>
-            <input type="tel" id="phone" name="phone">
-          </div>
+        <div class="gallery-item">
+          <img src="Alma Restaurant Finals-12.jpg" alt="Interior of Alma Tacos" class="gallery-image">
         </div>
-
-         <!-- reason checkboxes -->
-        <div class="form-row">
-            <div class="form-field" style="flex: 1 1 100%;">
-            <span class="contact-reasons-label">What would you like to contact us about?</span>
-            <div class="checkbox-group">
-                <label class="checkbox-option">
-                <input type="checkbox" name="reason[]" value="general_question">
-                <span>General Question</span>
-                </label>
-
-                <label class="checkbox-option">
-                <input type="checkbox" name="reason[]" value="food_experience">
-                <span>Food Experience</span>
-                </label>
-
-                <label class="checkbox-option">
-                <input type="checkbox" name="reason[]" value="issue">
-                <span>Issue</span>
-                </label>
-
-                <label class="checkbox-option">
-                <input type="checkbox" name="reason[]" value="hiring">
-                <span>Hiring</span>
-                </label>
-
-                <label class="checkbox-option">
-                <input type="checkbox" name="reason[]" value="catering">
-                <span>Catering</span>
-                </label>
-
-                <label class="checkbox-option">
-                <input type="checkbox" name="reason[]" value="business_request">
-                <span>Business Request</span>
-                </label>
-            </div>
-            </div>
+        <div class="gallery-item">
+          <img src="Alma Restaurant Finals-14.jpg" alt="Churros with chocolate sauce" class="gallery-image">
         </div>
-
-        <div class="form-row">
-          <div class="form-field" style="flex: 1 1 100%;">
-            <label for="comments">Comments</label>
-            <textarea id="comments" name="comments" placeholder="How can we help?"></textarea>
-          </div>
+        <div class="gallery-item">
+          <img src="Alma Restaurant Finals-20.jpg" alt="Smoked brisket tacos" class="gallery-image">
         </div>
-
-        <button type="submit" class="contact-submit">Send Message</button>
-      </form>
+        <div class="gallery-item">
+          <img src="Alma Restaurant Finals-29.jpg" alt="Guests enjoying food" class="gallery-image">
+        </div>
+        <div class="gallery-item">
+          <img src="Alma Restaurant Finals-47.jpg" alt="Patio at Alma Tacos" class="gallery-image">
+        </div>
+      </div>
     </section>
   </main>
+
+  <!-- Lightbox / Album -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-content">
+      <button class="lightbox-arrow prev" id="lightboxPrev" aria-label="Previous image">‹</button>
+      <img src="" alt="" class="lightbox-image" id="lightboxImage">
+      <button class="lightbox-arrow next" id="lightboxNext" aria-label="Next image">›</button>
+      <button class="lightbox-close" id="lightboxClose" aria-label="Close gallery">✕</button>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer>
@@ -634,10 +622,11 @@
   </footer>
 
   <script>
-    // Contact section scroll-in animation
-    const contactSection = document.querySelector('.contact-section');
+    // Gallery scroll-in animation
+    const gallerySection = document.querySelector('.gallery-section');
+    const galleryItems = document.querySelectorAll('.gallery-item');
 
-    const observer = new IntersectionObserver(
+    const galleryObserver = new IntersectionObserver(
       (entries, obs) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -649,9 +638,77 @@
       { threshold: 0.2 }
     );
 
-    if (contactSection) {
-      observer.observe(contactSection);
+    if (gallerySection) {
+      galleryObserver.observe(gallerySection);
     }
+
+    galleryItems.forEach(item => {
+      galleryObserver.observe(item);
+    });
+
+    // Lightbox / album functionality
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxPrev = document.getElementById('lightboxPrev');
+    const lightboxNext = document.getElementById('lightboxNext');
+
+    const images = Array.from(document.querySelectorAll('.gallery-image'));
+    let currentIndex = 0;
+
+    function openLightbox(index) {
+      currentIndex = index;
+      const img = images[currentIndex];
+      lightboxImage.src = img.src;
+      lightboxImage.alt = img.alt || '';
+      lightbox.classList.add('open');
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+    }
+
+    function showPrev() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      const img = images[currentIndex];
+      lightboxImage.src = img.src;
+      lightboxImage.alt = img.alt || '';
+    }
+
+    function showNext() {
+      currentIndex = (currentIndex + 1) % images.length;
+      const img = images[currentIndex];
+      lightboxImage.src = img.src;
+      lightboxImage.alt = img.alt || '';
+    }
+
+    images.forEach((img, index) => {
+      img.addEventListener('click', () => openLightbox(index));
+    });
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxPrev.addEventListener('click', showPrev);
+    lightboxNext.addEventListener('click', showNext);
+
+    // Close on background click
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) {
+        closeLightbox();
+      }
+    });
+
+    // Keyboard controls
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('open')) return;
+
+      if (e.key === 'Escape') {
+        closeLightbox();
+      } else if (e.key === 'ArrowLeft') {
+        showPrev();
+      } else if (e.key === 'ArrowRight') {
+        showNext();
+      }
+    });
 
     // Navbar background change after hero
     const navbar = document.querySelector('.navbar');
