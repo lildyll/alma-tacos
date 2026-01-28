@@ -344,14 +344,28 @@
       transition: transform 0.2s ease;
     }
 
+    .item-image-wrap {
+      width: 100%;
+      height: 180px;   
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 0.75rem;
+      background-color: white;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;   
+    }
 
     .item-image {
-      width: 100%;
-      height: 180px;
+      width: 50%;
+      min-width: 200px;
+      height: 100%;
       object-fit: cover;
-      border-radius: 6px;
-      margin-bottom: 0.75rem;
-      background-color: #f8f4e8; 
+
+      /* move crop upward to remove top whitespace */
+      object-position: center 80%; 
+      display: block;
     }
 
     /* Button */
@@ -781,14 +795,18 @@
       <div class="popular-grid">
         <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-chilebraised-beef-taco_5291154b-a041-4abe-91b1-d9d82032b553" class="popular-link">
           <div class="popular-item">
-            <img src="Alma Restaurant Finals-17.jpg" alt="Chile-Braised Beef" class="item-image">
+            <div class="item-image-wrap">
+              <img src="Alma Menu - Chile Braised Beef Taco.jpg" alt="Chile-Braised Beef" class="item-image">
+            </div>
             <h3>Chile-Braised Beef</h3>
-            <p>Pickled red onions, arbol salta, cilantro</p>
+            <p>Pickled red onions, arbol salsa, cilantro</p>
           </div>
         </a>
         <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-smoked-brisket-taco_5daee236-fb55-417f-a03a-2bb9452d54c7" class="popular-link">
           <div class="popular-item">
-            <img src="Alma Restaurant Finals-11.jpg" alt="Smoked Brisket" class="item-image">
+            <div class="item-image-wrap">
+              <img src="Alma Menu - Brisket Taco.jpg" alt="Smoked Brisket" class="item-image">
+            </div>
             <h3>Smoked Brisket</h3>
             <p>Guacamole, salsa roja, cilantro, onion</p>
           </div>
@@ -796,9 +814,11 @@
 
         <a href="https://order.toasttab.com/online/alma-tacos-5514-britton-dr/item-churros_99a45b58-3ae5-4294-bd09-d37576e17962" class="popular-link">
           <div class="popular-item">
-            <img src="Alma Restaurant Finals-52.jpg" alt="Churros" class="item-image">
+            <div class="item-image-wrap">
+              <img src="Alma Menu - Churros.jpg" alt="Churros" class="item-image" style="object-position:center 70%; max-width:45%;">
+            </div>
             <h3>Homemade Churros</h3>
-            <p><br></p>
+            <p></p>
           </div>
         </a>
       </div>
